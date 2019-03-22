@@ -13153,6 +13153,8 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="k">import</span> <span class="n">Window</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="k">import</span> <span class="nb">sum</span> <span class="k">as</span> <span class="n">Fsum</span>
 
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="k">import</span> <span class="n">VectorAssembler</span><span class="p">,</span> <span class="n">Normalizer</span>
+
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -13942,7 +13944,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create column churn to flag churn events</span>
@@ -13963,7 +13965,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[21]:</div>
+    <div class="prompt output_prompt">Out[16]:</div>
 
 
 
@@ -13980,7 +13982,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create column churn_user to identify users with a churn event</span>
@@ -13995,7 +13997,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># find some users with a churn action for testing</span>
@@ -14012,7 +14014,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[23]:</div>
+    <div class="prompt output_prompt">Out[18]:</div>
 
 
 
@@ -14033,7 +14035,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># check columns for user 125</span>
@@ -14102,7 +14104,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># level at time of churn</span>
@@ -14140,7 +14142,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># number of users by account level and churn</span>
@@ -14197,7 +14199,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># average numbers of days visited by user and churn</span>
@@ -14236,7 +14238,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot histogram of number of days visited</span>
@@ -14289,7 +14291,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># total possible days by user</span>
@@ -14319,12 +14321,12 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+----------+-----------------+
-|churn_user|        avg(days)|
-+----------+-----------------+
-|         0|48.00574712643678|
-|         1|24.46153846153846|
-+----------+-----------------+
+<pre>+----------+-------------------+
+|churn_user|total_possible_days|
++----------+-------------------+
+|         0|  48.00574712643678|
+|         1|  24.46153846153846|
++----------+-------------------+
 
 </pre>
 </div>
@@ -14336,7 +14338,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># percent of possible days visited by user</span>
@@ -14357,7 +14359,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[30]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -14377,7 +14379,7 @@ Name: Percent_days_visited, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Plot percent of days visited by churn</span>
@@ -14437,7 +14439,7 @@ Name: Percent_days_visited, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># number of songs listened to by day by churn</span>
@@ -14462,7 +14464,7 @@ Name: Percent_days_visited, dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[35]:</div>
+    <div class="prompt output_prompt">Out[27]:</div>
 
 
 
@@ -14482,7 +14484,7 @@ Name: daily_avg, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#plot distribution of average number of songs listened to each day visited</span>
@@ -14535,14 +14537,14 @@ Name: daily_avg, dtype: float64</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Hypothesis-4:-Churn-users-visit-soem-pages-more-or-less-often-tahn-other-users">Hypothesis 4: Churn users visit soem pages more or less often tahn other users<a class="anchor-link" href="#Hypothesis-4:-Churn-users-visit-soem-pages-more-or-less-often-tahn-other-users">&#182;</a></h3><p>For this item we will look at total count of page visits and compare the ranking between the groups to see if there are differences that look interesting.</p>
+<h3 id="Hypothesis-4:-Churn-users-visit-some-pages-more-or-less-often-tahn-other-users">Hypothesis 4: Churn users visit some pages more or less often tahn other users<a class="anchor-link" href="#Hypothesis-4:-Churn-users-visit-some-pages-more-or-less-often-tahn-other-users">&#182;</a></h3><p>For this item we will look at total count of page visits and compare the ranking between the groups to see if there are differences that look interesting.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># frequency of page visits by churn</span>
@@ -14564,7 +14566,7 @@ Name: daily_avg, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Plot page ranking by count by group</span>
@@ -14625,26 +14627,316 @@ Name: daily_avg, dtype: float64</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Feature-Engineering">Feature Engineering<a class="anchor-link" href="#Feature-Engineering">&#182;</a></h1><p>Once you've familiarized yourself with the data, build out the features you find promising to train your model on. To work with the full dataset, you can follow the following steps.</p>
+<h1 id="Feature-Engineering">Feature Engineering<a class="anchor-link" href="#Feature-Engineering">&#182;</a></h1><p>Now that we have a better understanding of the dataset and some features we think are interesting (based on our hypothesis investigations), we can move on to feature engineering.  In this section we will transform the dataset to create a new set including the following:</p>
 <ul>
-<li>Write a script to extract the necessary features from the smaller subset of data</li>
-<li>Ensure that your script is scalable, using the best practices discussed in Lesson 3</li>
-<li>Try your script on the full data set, debugging your script if necessary</li>
+<li>userId - primary key</li>
+<li>level - either free, paid, or both (having at one time switched level within the timeframe)</li>
+<li>visit_rate - fraction of days the user visited site</li>
+<li>page visit counts for:<ul>
+<li>Roll Advert</li>
+<li>Error</li>
+<li>Login</li>
+<li>Register</li>
+<li>Submit Registration</li>
+<li>other_pages - sum of all other page visit counts</li>
 </ul>
-<p>If you are working in the classroom workspace, you can just extract features based on the small subset of data contained here. Be sure to transfer over this work to the larger dataset when you work on your Spark cluster.</p>
+</li>
+<li>churn- item we are attempting to predict</li>
+</ul>
+<p>For this effort we will build up stepwise and then convert to a function that performs the full feature engineering (such as it can easily be applied to other datasets).</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># read in fresh copy of sample data</span>
+<span class="n">df_fe</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="s2">&quot;mini_sparkify_event_data.json&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create function to convert timestamp column to date</span>
+
+<span class="k">def</span> <span class="nf">convert_ts</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function convert column with timestamp to a date in form yyyy-mm-dd</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including original data and added column &quot;churn&quot; </span>
+<span class="sd">            indicating user has churn event</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">get_date</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">get_date</span><span class="p">(</span><span class="s1">&#39;ts&#39;</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ts&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create function to determine churn for each user</span>
+
+<span class="k">def</span> <span class="nf">get_churn</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function to add indicator that user has a churn event.</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including userid and churn indicator</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">flag_churn</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="s2">&quot;Cancellation Confirmation&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">())</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span><span class="s1">&#39;page&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;churn_flag&quot;</span><span class="p">,</span><span class="n">flag_churn</span><span class="p">(</span><span class="s2">&quot;page&quot;</span><span class="p">))</span>
+    
+    <span class="n">windowval</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;churn&quot;</span><span class="p">,</span> <span class="n">Fsum</span><span class="p">(</span><span class="s2">&quot;churn_flag&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">windowval</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;churn_flag&quot;</span><span class="p">,</span><span class="s2">&quot;page&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create function to determine level (paid, free, both) for each user</span>
+
+<span class="k">def</span> <span class="nf">get_level</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function determine account level (paid, free, both) for each user</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including userid and one hot encoded level</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+        
+    <span class="n">flag_paid</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="s2">&quot;paid&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">())</span>
+    <span class="n">level_type</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="s2">&quot;paid&quot;</span> <span class="k">if</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">==</span><span class="mi">2</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;both&quot;</span> <span class="k">if</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;free&quot;</span><span class="p">))</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;paid_flag&quot;</span><span class="p">,</span><span class="n">flag_paid</span><span class="p">(</span><span class="s2">&quot;level&quot;</span><span class="p">))</span> \
+        <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="s2">&quot;paid_flag&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="s2">&quot;paid_flag&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">))</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span><span class="n">level_type</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span><span class="s1">&#39;min&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;free&#39;</span><span class="p">,</span><span class="s1">&#39;paid&#39;</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">],</span> 
+                            <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;level&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;free&#39;</span><span class="p">,</span><span class="s1">&#39;paid&#39;</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create function to determine fraction of days visited for each user</span>
+
+<span class="k">def</span> <span class="nf">get_visit_frac</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function determine fraction of days visited for each user</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including userid and fraction of days that teh user visited site</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">visits</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+
+    <span class="n">delta_day</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> 
+            <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">())</span>
+
+    <span class="n">days</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">))</span> 
+    
+    <span class="n">days</span> <span class="o">=</span> <span class="n">days</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;days&quot;</span><span class="p">,</span> <span class="n">delta_day</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="s1">&#39;start&#39;</span><span class="p">))</span> \
+        <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">visits</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">days</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;visit_rate&#39;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">)</span><span class="o">/</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;days&#39;</span><span class="p">))</span> \
+        <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span><span class="s1">&#39;days&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># create function to return scaled page visit info</span>
+
+<span class="k">def</span> <span class="nf">get_page_visits</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function determine fraction of days visited for each user</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including the vector assembled and normalized page counts</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+    <span class="n">interest_pages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Roll Advert&#39;</span><span class="p">,</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span><span class="s1">&#39;Login&#39;</span><span class="p">,</span><span class="s1">&#39;Register&#39;</span><span class="p">,</span><span class="s1">&#39;Submit Registration&#39;</span><span class="p">]</span>
+
+    <span class="n">rename_page</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;other&#39;</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">interest_pages</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;page_adj&#39;</span><span class="p">,</span><span class="n">rename_page</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;page_adj&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Roll Advert&#39;</span><span class="p">,</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span><span class="s1">&#39;Login&#39;</span><span class="p">,</span><span class="s1">&#39;Register&#39;</span><span class="p">,</span><span class="s1">&#39;Submit Registration&#39;</span><span class="p">,</span><span class="s1">&#39;other&#39;</span><span class="p">],</span> 
+                            <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;page_visits&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">Normalizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;page_visits&quot;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;scaled_page_visits&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Roll Advert&#39;</span><span class="p">,</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span><span class="s1">&#39;Login&#39;</span><span class="p">,</span><span class="s1">&#39;Register&#39;</span><span class="p">,</span><span class="s1">&#39;Submit Registration&#39;</span><span class="p">,</span><span class="s1">&#39;other&#39;</span><span class="p">,</span><span class="s1">&#39;page_visits&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># function to bring it all together</span>
+
+<span class="k">def</span> <span class="nf">feature_eng</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function determine fraction of days visited for each user</span>
+<span class="sd">    Input:</span>
+<span class="sd">        df : pyspark dataframe including action data</span>
+<span class="sd">    Output:</span>
+<span class="sd">        pyspark dataframe including all of engineered features and associated labels</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span><span class="s1">&#39;level&#39;</span><span class="p">,</span><span class="s1">&#39;ts&#39;</span><span class="p">,</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">convert_ts</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    
+    <span class="n">output</span> <span class="o">=</span> <span class="n">get_churn</span><span class="p">(</span><span class="n">df_fe</span><span class="p">)</span>
+    
+    <span class="n">df_level</span> <span class="o">=</span> <span class="n">get_level</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_level</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+    
+    <span class="n">df_visit</span> <span class="o">=</span> <span class="n">get_visit_frac</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_visit</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+    
+    <span class="n">df_pages</span> <span class="o">=</span> <span class="n">get_page_visits</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_pages</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+    
+    <span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span><span class="s1">&#39;visit_rate&#39;</span><span class="p">,</span><span class="s1">&#39;scaled_page_visits&#39;</span><span class="p">],</span> 
+                            <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;churn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">),</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">))</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+<span class="n">df_fe_output</span> <span class="o">=</span> <span class="n">feature_eng</span><span class="p">(</span><span class="n">df_fe</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_fe_output</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-----+--------------------+
+|label|            features|
++-----+--------------------+
+|    0|(10,[0,3,4,9],[1....|
+|    0|(10,[2,3,4,9],[1....|
+|    1|(10,[0,3,4,9],[1....|
+|    0|(10,[1,3,4,5,9],[...|
+|    1|(10,[1,3,5,9],[1....|
+|    0|(10,[0,3,4,5,9],[...|
+|    0|(10,[1,3,4,5,9],[...|
+|    1|(10,[2,3,4,5,9],[...|
+|    0|(10,[2,3,4,5,9],[...|
+|    1|(10,[1,3,4,9],[1....|
+|    0|(10,[2,3,4,5,9],[...|
+|    0|(10,[0,3,4,9],[1....|
+|    1|(10,[2,3,4,5,9],[...|
+|    0|(10,[2,3,4,5,9],[...|
+|    0|(10,[2,3,4,5,9],[...|
+|    0|(10,[1,3,4,5,9],[...|
+|    1|(10,[0,3,4,5,9],[...|
+|    1|(10,[2,3,4,9],[1....|
+|    0|(10,[2,3,4,5,9],[...|
+|    0|(10,[0,3,4,9],[1....|
++-----+--------------------+
+only showing top 20 rows
+
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14662,7 +14954,7 @@ Name: daily_avg, dtype: float64</pre>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#split set into training and validation sets</span>
 </pre></div>
 
     </div>
@@ -14700,6 +14992,7 @@ Name: daily_avg, dtype: float64</pre>
 <li><a href="https://stackoverflow.com/questions/42586096/pyspark-assigning-name-to-column-agg-output">https://stackoverflow.com/questions/42586096/pyspark-assigning-name-to-column-agg-output</a></li>
 <li><a href="https://stackoverflow.com/questions/22241240/how-to-normalize-a-histogram-in-python?rq=1">https://stackoverflow.com/questions/22241240/how-to-normalize-a-histogram-in-python?rq=1</a></li>
 <li><a href="https://stackoverflow.com/questions/44627386/how-to-find-count-of-null-and-nan-values-for-each-column-in-a-pyspark-dataframe">https://stackoverflow.com/questions/44627386/how-to-find-count-of-null-and-nan-values-for-each-column-in-a-pyspark-dataframe</a></li>
+<li><a href="https://www.mien.in/2018/03/25/reshaping-dataframe-using-pivot-and-melt-in-apache-spark-and-pandas/">https://www.mien.in/2018/03/25/reshaping-dataframe-using-pivot-and-melt-in-apache-spark-and-pandas/</a></li>
 </ul>
 
 </div>
