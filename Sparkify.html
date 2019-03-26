@@ -13135,7 +13135,39 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Sparkify-Project-Workspace">Sparkify Project Workspace<a class="anchor-link" href="#Sparkify-Project-Workspace">&#182;</a></h1><p>Workspace to investigate predicting user churn (account cancellation) for a fictional music app (Sparkify).  This project takes user action records (user info, page visited, timestamp, etc) as inputs.  These records will then be engineered to build features.  The resulting feature will used to generate a ML model for prediction.  Spark will be utilized to facilitate the analysis.</p>
+<h1 id="Music-App-Churn-Prediction">Music App Churn Prediction<a class="anchor-link" href="#Music-App-Churn-Prediction">&#182;</a></h1><h4 id="Udacity-Data-Science-Capstone-project">Udacity Data Science Capstone project<a class="anchor-link" href="#Udacity-Data-Science-Capstone-project">&#182;</a></h4><h4 id="Prepared-by-James-Henzi">Prepared by James Henzi<a class="anchor-link" href="#Prepared-by-James-Henzi">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Project-Overview">Project Overview<a class="anchor-link" href="#Project-Overview">&#182;</a></h2><p>Have you ever noticed that it seems like apps know you’re considering canceling membership? They always come with some type of offer or incentive (reduced fees, etc) at just the right moment. This is hardly a coincidence.  Application are constantly collect data regarding user activity.  The companies making the apps use this "big data" lake to analyze and predict user behaviors.  Being able to translate this data into the correct actions can make or break a company.</p>
+<p>For this project we will look at a dataset from a fictitious music app called Sparkify (thanks to Udacity for providing this dataset).  The the goal of the project is to predict use the data to predict user churn.  This notebook will set through the process of loading the dataset, exploring the data, creating a feature engineered set include features of interest, building a machine learning model, and evaluating this model.</p>
+<p>Throughout the project big data tools will be utilized.  Specifically we will leverage Spark and the associated relevant libraries (pyspark and pyspark.ml).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Problem-Statement">Problem Statement<a class="anchor-link" href="#Problem-Statement">&#182;</a></h2><p>As mentioned in the Overview we will be using data for a fictitious music app called Sparkify. For an application of this type retaining users is a huge priority as users translate into money (subscription fees, advertisement revenue).  As such it is critical for these companies to known when a user might churn (leave/quit the app).  If a company can predict when users might be thinking about leaving they can take countermeasures to try to keep that user or group of users (provide incentives, perhaps add features, etc).<br>
+For this project we will use a modest set of data covering actions of a small sample of users for a few monthes time.  Based on the actions taken by these users we will try to build a model to predict which users will churn.  The steps we will take are:</p>
+<ul>
+<li>Load and Clean Data: read in the json datatset, evaluate the cleanliness and completeness, and clean as needed</li>
+<li>Exploratory Data Analysis: define churn and create a churn attribute.  Then test hypotheses about user behavior (churn vs no churn).  Based on our findings we will determine features of interest.</li>
+<li>Feature Engineering: build an ETL pipeline to take input data like our sample and transpose them into a summarized datatset including our desired features of interest</li>
+<li>Build Machine Learning Models: build baseline models with a number of classification method, choose the best model, feature optimize the model, and finally test the resutls of the optimized model.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Imports-and-Set-up-Environment">Imports and Set up Environment<a class="anchor-link" href="#Imports-and-Set-up-Environment">&#182;</a></h2><p>Import desired libraries and set up Spark environment.</p>
 
 </div>
 </div>
@@ -14383,7 +14415,7 @@ Name: Percent_days_visited, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Plot percent of days visited by churn</span>
@@ -14489,7 +14521,7 @@ Name: daily_avg, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#plot distribution of average number of songs listened to each day visited</span>
@@ -14572,7 +14604,7 @@ Name: daily_avg, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Plot page ranking by count by group</span>
@@ -15076,9 +15108,44 @@ only showing top 20 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>RF   F1= 0.6385373608903021
+<pre>RF   F1= 0.6481092436974789
 LR   F1= 0.6476673427991886
 GBT  F1= 0.739807033924681
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Get accurracy for top model (GBTClassifier) on validation set</span>
+<span class="n">gbt_results</span> <span class="o">=</span> <span class="n">model_gbt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">validation</span><span class="p">)</span>
+<span class="n">accuracy_gbt</span> <span class="o">=</span> <span class="p">((</span><span class="n">gbt_results</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">gbt_results</span><span class="o">.</span><span class="n">churn</span> <span class="o">==</span> <span class="n">gbt_results</span><span class="o">.</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span><span class="o">/</span>
+                <span class="p">(</span><span class="n">gbt_results</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GBTClassifier model accuracy = &quot;</span><span class="p">,</span><span class="n">accuracy_gbt</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>GBTClassifier model accuracy =  76.47058823529412
 </pre>
 </div>
 </div>
@@ -15090,27 +15157,34 @@ GBT  F1= 0.739807033924681
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Tune-Model">Tune Model<a class="anchor-link" href="#Tune-Model">&#182;</a></h2><p>From preliminary model testing above it was found that GBTClassifier perfromed the best on the validation set.  Thus we will tune this model using crossvalidation (utilzing the combined train and validation set).  We'll focus on the maxIter and maxDepth parameters for this tuning.  After tuning we will check the accuaracy of the tuned model at predicting the test set.</p>
+<h2 id="Tune-Model">Tune Model<a class="anchor-link" href="#Tune-Model">&#182;</a></h2><p>From preliminary model testing above it was found that GBTClassifier perfromed the best on the validation set.  Thus we will tune this model using crossvalidation (utilzing the combined train and validation set).  We'll focus on the maxIter and maxDepth parameters for this tuning as a eeb search showed these to be the most common features used in tuning. 
+The steps to be taken are:</p>
+<ul>
+<li>Build a CrossValidator utilizing our existing ML pipeline for the GBTClassifier, a parameter grid varying the parameters of interest, and our F1 evaluator.</li>
+<li>Fit the CrossValidator to our combined training and validation set (basically making them one large training set).  We can do this as the CrossValidator utilzies folds to avoid overfitting.</li>
+<li>Examine the CrossValidator results.  Determine the optimal parameters found.</li>
+<li>Check the final model accuracy utilzing the testign set.  Compare this accuracy to that of the baseline model (on the validation set)</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Tune GBTClassifier model usign cross validation</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Set up CrossValidator on GBTClassifier model</span>
 
 <span class="n">paramGrid</span> <span class="o">=</span> <span class="n">ParamGridBuilder</span><span class="p">()</span> \
     <span class="o">.</span><span class="n">addGrid</span><span class="p">(</span><span class="n">gbt</span><span class="o">.</span><span class="n">maxIter</span><span class="p">,[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span> \
-    <span class="o">.</span><span class="n">addGrid</span><span class="p">(</span><span class="n">gbt</span><span class="o">.</span><span class="n">maxDepth</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> \
+    <span class="o">.</span><span class="n">addGrid</span><span class="p">(</span><span class="n">gbt</span><span class="o">.</span><span class="n">maxDepth</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span> \
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 
 <span class="n">crossval</span> <span class="o">=</span> <span class="n">CrossValidator</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">pipeline_gbt</span><span class="p">,</span>
                           <span class="n">estimatorParamMaps</span><span class="o">=</span><span class="n">paramGrid</span><span class="p">,</span>
-                          <span class="n">evaluator</span><span class="o">=</span><span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span><span class="n">labelCol</span><span class="o">=</span><span class="s1">&#39;churn&#39;</span><span class="p">),</span>
+                          <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">,</span>
                           <span class="n">numFolds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
@@ -15121,12 +15195,11 @@ GBT  F1= 0.739807033924681
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Fit and evaluate optimized model</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Fit CrossValidator</span>
 <span class="n">cvModel</span> <span class="o">=</span> <span class="n">crossval</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">rest</span><span class="p">)</span>
-<span class="n">f1</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">cvModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -15137,6 +15210,65 @@ GBT  F1= 0.739807033924681
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># See crossvalidation results with associated parameters</span>
+<span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cvModel</span><span class="o">.</span><span class="n">avgMetrics</span><span class="p">,</span> <span class="n">paramGrid</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[47]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(0.6852219675749087,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 10,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 2}),
+ (0.6676847611332781,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 10,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 5}),
+ (0.6628350584207969,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 10,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 10}),
+ (0.6627526608729616,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 20,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 2}),
+ (0.6586736062637799,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 20,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 5}),
+ (0.6628350584207969,
+  {Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxIter&#39;, doc=&#39;max number of iterations (&gt;= 0).&#39;): 20,
+   Param(parent=&#39;GBTClassifier_e1d8121dcd90&#39;, name=&#39;maxDepth&#39;, doc=&#39;Maximum depth of the tree. (&gt;= 0) E.g., depth 0 means 1 leaf node; depth 1 means 1 internal node + 2 leaf nodes.&#39;): 10})]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The above output is a bit busy.  However we can find that the first model listed yielded the best average metric (~0.685).  The parameters utilzied for that model are maxIter=10 and maxDepth = 5.  The model utilizing our baseline parameters yielded a metric (F1 score) of 0.668.  So we do see a modest improvement in the F1 score.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Check accuracy at predicting the test set</span>
@@ -15160,7 +15292,7 @@ GBT  F1= 0.739807033924681
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Optimized model accuracy =  86.66666666666667
+<pre>Optimized model accuracy =  80.0
 </pre>
 </div>
 </div>
@@ -15172,7 +15304,34 @@ GBT  F1= 0.739807033924681
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The tuned model yielded an accuracy of 86.7% on the test set.  This is a pretty good number given the relatively low number of features utilized.  Future work could investigate utilzing a larger dataset to build the model or leveraging a subject matter expert to help in the feature selection.</p>
+<p>The tuned model yielded an accuracy of 80.0% on the test set.  This is a pretty good number given the relatively low number of features and timeline utilized.  Additionally this is an improvement from the 76.5% the baseline model showed on teh validation set.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>We were successful in gaining some insight into how apps use their data to predict user behavior. With a relatively modest sample set from the fictitious music app we successfully:</p>
+<ul>
+<li>Identifying features of interest: utilizing the user action data (similar to data any app would collect) we used hypotheses regarding expected user behavior to determine features of interest.</li>
+<li>Build a ETL pipeline to take the raw data and feature engineer it into an aggregated set including our desired features of interest.</li>
+<li>Training a model: we utilized the determined features of interest to train multiple baseline models and utilized the F1 metric to compare models. We then chose the best model to move forward and tune.</li>
+<li>Evaluate our model: we then evaluated our model and found it to yield 80% accurate predictions on a test dataset. While this is likely short of what an app company would target, this is thought be realtively good for our effort given the data size and limited business level subject matter expertise.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Potential-Future-Work/Improvement">Potential Future Work/Improvement<a class="anchor-link" href="#Potential-Future-Work/Improvement">&#182;</a></h2><p>There are a number of items or methods that could be performed to improve/enhance the findings from this study.  Some potential items are:</p>
+<ul>
+<li>Invetigate user Upgrade/Downgrade : this study basically focused on the user churn from being a member (of any level) to not being a member.  However there is much rich data regarding behavior regarding changes between membership levels.  Thsi would be very interestign to app company.</li>
+<li>Expand analysis to a larger dataset: utilzing and larger set (more users, longer period) would give us the model more opportunity to learn user behavior.  The facilitate thsi type of analysis a significant compute cluster would be required (AWS, Azure, Google, etc).</li>
+<li>Leverage a subject matter expert: our feature selection was based on hypotheses based on my intuition as a user.  However, leveraging an expert in this type of application would probably help us to hone in on more, high quality features.</li>
+</ul>
 
 </div>
 </div>
@@ -15188,6 +15347,7 @@ GBT  F1= 0.739807033924681
 <li><a href="https://stackoverflow.com/questions/44627386/how-to-find-count-of-null-and-nan-values-for-each-column-in-a-pyspark-dataframe">https://stackoverflow.com/questions/44627386/how-to-find-count-of-null-and-nan-values-for-each-column-in-a-pyspark-dataframe</a></li>
 <li><a href="https://www.mien.in/2018/03/25/reshaping-dataframe-using-pivot-and-melt-in-apache-spark-and-pandas/">https://www.mien.in/2018/03/25/reshaping-dataframe-using-pivot-and-melt-in-apache-spark-and-pandas/</a></li>
 <li><a href="https://creativedata.atlassian.net/wiki/spaces/SAP/pages/83237142/Pyspark+-+Tutorial+based+on+Titanic+Dataset">https://creativedata.atlassian.net/wiki/spaces/SAP/pages/83237142/Pyspark+-+Tutorial+based+on+Titanic+Dataset</a></li>
+<li><a href="https://forums.databricks.com/questions/12097/pyspark-how-to-get-best-params-in-grid-search.html">https://forums.databricks.com/questions/12097/pyspark-how-to-get-best-params-in-grid-search.html</a></li>
 </ul>
 
 </div>
